@@ -8,14 +8,8 @@ a_th = 2.0
 d_th = 0.4
 """ float: Threshold for the control of the linear distance"""
 
-d_min = 1.2
+d_min = 0.8
 """ float: Threshold for the minimum distance from the golden token"""
-
-#dist2 =0.0 
-"""Float: distance to compare"""
-
-#dist3=0.0 
-"""Float: distance to compare"""
 
 angl2 = 0.0
 """Float: angolaxion to compare"""
@@ -52,9 +46,9 @@ def turn(speed, seconds):
     R.motors[0].m0.power = 0
     R.motors[0].m1.power = 0
     
-def grab_release(code):
+def grab_release():
     """
-    function that bring in entrance the token identified in tha main and go grab it
+    function that identify the nearest silver token and go grab it
     """    
     dist= 10
     for token2 in R.see():
@@ -74,15 +68,15 @@ def grab_release(code):
         else:
             print ("mo arrivo")
             drive(20, 0.5)
-            grab_release(token2.info.code)
+            grab_release()
     elif angl > a_th:
         print ("mi giro a destra")
         turn (5,0.3)
-        grab_release(token2.info.code)
+        grab_release()
     elif angl < -a_th:
         print ("mi giro a sinistra")
         turn (-5,0.3)
-        grab_release(token2.info.code)
+        grab_release()
 
 def scelta():
     """
@@ -106,30 +100,32 @@ def scelta():
             
     if dist2 > dist3:
         print ("da questa parte")
-        turn (12,2)
+        turn (12,1.5)
     else:
         print ("invece da questa parte")
-        turn(-12,2)
+        turn(-12,1.5)
 
 def distance(token):
     """
     function that bring in entrance the token identified in the main and turn to not hit it 
     """
+    
     dist = token.dist
     angl = token.rot_y
-    if -10 < angl < 10:
+    if -7.5 < angl < 7.5:
         if dist<= d_min:
-            if angl >= a_th+1 :
+            if angl >= a_th+2.3 :
                 print("a sinistra")
                 turn(-15,1.3)
-                #drive(10,1)
-            elif angl <= -a_th-1 :
+                
+            elif angl <= -a_th-2.3 :
                 print("a destra")
                 turn(15,1.3)
-                #drive(10,1)
-            elif -a_th-1 < angl < a_th+1:
+                
+            elif -a_th-2.3 < angl < a_th+2.3:
                 print("sono indeciso")
                 scelta()
+                
         elif dist> d_min:
             print("ancora lontano")
     elif -135 < angl < -45 or 45 < angl < 135:
@@ -143,31 +139,22 @@ def distance(token):
  
        
 #the main
-drive (20,5)
+
+drive (17,5)
 while 1:
-    drive(20,0.5)
-    #silver = []
-    #i=0
+    drive(17,0.5)
+    
     for token in R.see():
         if token.info.marker_type is MARKER_TOKEN_GOLD:
             if token.dist<=d_min:
                 distance(token)
         elif token.info.marker_type is MARKER_TOKEN_SILVER and token.dist<1.2 and -45 < token.rot_y < 45:
-            #silver.append(token.info.code)                       
-            #if silver[i] not in silver:
-            code=token.info.code
+            
             print("vediamo")
-            grab_release(code)
-            #i=i+1
-        #else:
-            #print("andata")
-    #drive(0,0.5)
+            grab_release()
+            
            
-"""                   
-for token in R.see():
-    if token.info.marker_type is MARKER_TOKEN_SILVER:
-        print(" dist %d  angl %d" %(token.dist, token.rot_y))  
-"""   
+  
     
     
     

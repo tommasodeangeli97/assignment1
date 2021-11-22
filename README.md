@@ -20,27 +20,61 @@ On Ubuntu, this can be accomplished by:
 * Get the location. In my case this was `/usr/local/lib/python2.7/dist-packages`
 * Create symlink: `ln -s path/to/simulator/sr/robot /usr/local/lib/python2.7/dist-packages/sr/`
 
-## Exercise
+## Assignement1
 -----------------------------
 
-To run one or more scripts in the simulator, use `run.py`, passing it the file names. 
+This assignment consist in moving the robot in a route, the robot need to avoid the contact whit the goldens tokens identified by info.marker_type MARKER_TOKEN_GOLD. The robot has also to see the silvers tokens and grab them.
 
-I am proposing you three exercises, with an increasing level of difficulty.
-The instruction for the three exercises can be found inside the .py files (exercise1.py, exercise2.py, exercise3.py).
+## Pseudocode
+-----------------------------
 
-When done, you can run the program with:
+I defined three functions:
+
+1) grab_release():   [we enter in this function when we found a silver token near the robot]
+   R.see() to watch the nearest silver token 
+   adjustung the distance and the angolation between the robot and the token
+   R.grab()
+   turn
+   R.release()
+   and turn back to the first position
+   
+2) scelta():   [we start this function only if we are in front of a golden token and the distance between the robot and the golden token is less than d_min]
+   we watch the distance between the goldens tokens in 90th degree on the right and on the left using R.see()
+   we confront the two distance and we choose the higher
+   we turn in the direction where there is the higher distance
+   
+3) distance(token):   [we enter in this function when we are near a golden token and we pass the token that we have seen too close]
+   we whatch the angolation between the robot and the golden token
+   if we are more than a_th and the distance is less than d_min 
+     turn on the right
+   if we are less than -a_th and the distance is less than d_min
+     turn on the left
+   if we are in front of the token and the distance is less than d_min
+     scelta()
+   if we quite parallel and the distance is less than d_min
+     we turn a bit on the direction that manage us not to impact the goldens tokens
+   elif the distance in more than d_min
+     we go ahead without problems
+     
+Main
+   while 1:
+      drive()
+      we watch for each step all the tokens in the environment
+      if the token is gold
+         distance(token)
+      if the token is close and silver
+         grab_release()
+
+
+To run use `run.py`, passing it the file names. 
+
+You can run the program with:
 
 ```bash
-$ python run.py exercise1.py
+$ python2 run.py assignment2.py
 ```
 
-You have also the solutions of the exercises (folder solutions)
-
-```bash
-$ python run.py solutions/exercise1_solution.py
-```
-
-Robot API
+## Robot API
 ---------
 
 The API for controlling a simulated robot is designed to be as similar as possible to the [SR API][sr-api].
@@ -103,4 +137,4 @@ for m in markers:
 ```
 
 [sr-api]: https://studentrobotics.org/docs/programming/sr/
-assignment1
+
