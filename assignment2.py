@@ -8,7 +8,7 @@ a_th = 2.0
 d_th = 0.4
 """ float: Threshold for the control of the linear distance"""
 
-d_min = 0.8
+d_min = 1.0
 """ float: Threshold for the minimum distance from the golden token"""
 
 angl2 = 0.0
@@ -112,17 +112,17 @@ def distance(token):
     
     dist = token.dist
     angl = token.rot_y
-    if -7.5 < angl < 7.5:
+    if -10 < angl < 10:
         if dist<= d_min:
-            if angl >= a_th+2.3 :
+            if angl >= a_th+2.5 :
                 print("a sinistra")
                 turn(-15,1.3)
                 
-            elif angl <= -a_th-2.3 :
+            elif angl <= -a_th-2.5 :
                 print("a destra")
                 turn(15,1.3)
                 
-            elif -a_th-2.3 < angl < a_th+2.3:
+            elif -a_th-2.5 < angl < a_th+2.5:
                 print("sono indeciso")
                 scelta()
                 
